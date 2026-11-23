@@ -10,42 +10,66 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Caveat:wght@500;700&family=Oswald:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Playfair+Display+SC:wght@700&family=Playfair+Display:ital,wght@0,600;1,500&family=Pinyon+Script&family=Caveat:wght@500;700&family=Oswald:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<div class="awning" aria-hidden="true"></div>
-<div class="top"><span class="logo">debate<i>.</i></span><span><a href="https://lab.corentinbel.com/">lab</a> · <a href="https://corentinbel.com">corentinbel.com</a> · <a href="#methode">méthode</a></span></div>
+<body data-view="dehors">
 
-<header class="hero wrap">
-  <div class="sign"><span class="since">depuis 2026</span><span class="name">Café des Faits</span><span class="sub">bar · tabac · chiffres officiels</span></div>
-  <div class="board">
-    <h1>Les faits, <em>avant</em> le débat.</h1>
-    <p class="lede">Les mêmes arguments reviennent à chaque dîner, à chaque fil de commentaires, au comptoir. Ici, chacun est confronté aux chiffres officiels les plus récents,
-      avec la nuance qui compte et l'argument le plus solide de l'autre côté. Le but n'est pas de gagner un débat, c'est de le faire partir des mêmes chiffres.</p>
-    <ol class="how">
-      <li><b>devinez</b>notez votre pari sur la serviette : on se trompe tous, dans les deux sens</li>
-      <li><b>vérifiez</b>l'addition : le chiffre, la nuance, l'argument d'en face et les sources</li>
-      <li><b>partagez</b>chaque ticket a son lien : collez-le au lieu de recommencer la dispute</li>
-    </ol>
+<!-- ======================= DEHORS : la façade ======================= -->
+<section class="view" id="v-dehors" aria-label="La façade du café">
+  <svg id="facadeSvg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice" role="img" aria-label="Façade d'un café parisien au coucher du soleil : le Café des Faits"></svg>
+  <div class="street-top"><span class="logo">debate<i>.</i></span><span><a href="https://lab.corentinbel.com/">lab</a> · <a href="https://corentinbel.com">corentinbel.com</a></span></div>
+  <div class="street-cta">
+    <p class="tagline">Les arguments du comptoir, confrontés aux chiffres officiels.</p>
+    <button class="brass" id="enter">Voir la carte</button>
+    <p class="hint">ou poussez la porte</p>
   </div>
-</header>
+</section>
 
-<nav class="topics" aria-label="sujets"><div class="wrap" id="tabs"></div></nav>
-
-<main class="wrap">
-  <div class="tintro" id="tintro"></div>
-  <div class="cards" id="cards"></div>
-
-  <section class="method" id="methode">
-    <h3>méthode</h3>
+<!-- ======================= LA CARTE ======================= -->
+<section class="view" id="v-carte" aria-label="La carte">
+  <div class="interior" aria-hidden="true"><i class="globe g1"></i><i class="globe g2"></i><i class="globe g3"></i><i class="mirror m1"></i><i class="mirror m2"></i></div>
+  <div class="menu-wrap">
+    <button class="exit" data-go="dehors">← sortir du café</button>
+    <article class="menu" id="menu">
+      <svg class="orn tl" viewBox="0 0 100 100" aria-hidden="true"><path d="M6 94 V30 Q6 6 30 6 H94 M16 94 V36 Q16 16 36 16 H94 M30 30 q18 4 22 22 q-18 -4 -22 -22z M6 60 q20 0 26 -26" /></svg>
+      <svg class="orn tr" viewBox="0 0 100 100" aria-hidden="true"><path d="M6 94 V30 Q6 6 30 6 H94 M16 94 V36 Q16 16 36 16 H94 M30 30 q18 4 22 22 q-18 -4 -22 -22z M6 60 q20 0 26 -26" /></svg>
+      <svg class="orn bl" viewBox="0 0 100 100" aria-hidden="true"><path d="M6 94 V30 Q6 6 30 6 H94 M16 94 V36 Q16 16 36 16 H94 M30 30 q18 4 22 22 q-18 -4 -22 -22z M6 60 q20 0 26 -26" /></svg>
+      <svg class="orn br" viewBox="0 0 100 100" aria-hidden="true"><path d="M6 94 V30 Q6 6 30 6 H94 M16 94 V36 Q16 16 36 16 H94 M30 30 q18 4 22 22 q-18 -4 -22 -22z M6 60 q20 0 26 -26" /></svg>
+      <header class="mhead">
+        <div class="mhouse">Café des Faits</div>
+        <h1>La Carte</h1>
+        <p class="mtag">Les arguments qu'on entend à chaque dîner, servis avec les chiffres officiels, la nuance qui compte et l'argument le plus solide d'en face.</p>
+        <p class="mhow"><b>1</b> pariez sur la serviette · <b>2</b> recevez l'addition · <b>3</b> partagez le ticket</p>
+      </header>
+      <div id="courses"></div>
+      <section class="maison" id="methode">
+        <h2 class="course">La maison</h2>
     <p><b>Sources.</b> Organismes publics d'abord (INSEE, DREES, DARES, ministères, Cour des comptes, Eurostat, OCDE), puis études publiées dans des revues à comité de lecture. Toujours la dernière année disponible au moment de l'écriture, indiquée à côté du chiffre.</p>
     <p><b>Faits ou valeurs.</b> Chaque carte dit si le désaccord porte sur des <b>faits</b> (les chiffres peuvent trancher) ou sur des <b>valeurs</b> (les chiffres éclairent mais ne tranchent pas). Beaucoup de disputes tournent en rond parce qu'on se bat sur des chiffres alors qu'on n'est pas d'accord sur ce qui est juste.</p>
     <p><b>L'autre côté.</b> Chaque carte donne l'argument le plus solide de ceux qui pensent l'inverse, quand les données le soutiennent. Une page qui ne montre qu'un camp ne convainc que ce camp.</p>
     <p><b>Une erreur ?</b> Un chiffre dépassé ou mal cité : <a href="https://github.com/BelCorentin/debate.corentinbel.com/issues">signalez-le ici</a>, avec la source. Je corrige et je note la correction.</p>
-  </section>
-</main>
-<footer class="wrap">Page tenue par <a href="https://aboutme.corentinbel.com">Corentin Bel</a>, chercheur en neurosciences, à titre personnel. Aucun parti, aucun financement. Dernière mise à jour : <span id="upd"></span>.</footer>
+      </section>
+      <footer class="mfoot">Le patron : <a href="https://aboutme.corentinbel.com">Corentin Bel</a>, chercheur en neurosciences, à titre personnel. Aucun parti, aucun financement.<br>Carte mise à jour le <span id="upd"></span>.</footer>
+    </article>
+  </div>
+</section>
+
+<!-- ======================= À TABLE : un sujet ======================= -->
+<section class="view" id="v-table" aria-label="Le sujet choisi">
+  <div class="tablebar">
+    <button class="tb" data-go="carte">☰ la carte</button>
+    <span class="tbname" id="tbname"></span>
+    <span class="tbnav"><button class="tb" id="prevT">← plat précédent</button><button class="tb" id="nextT">plat suivant →</button></span>
+  </div>
+  <main class="wrap">
+    <div class="tintro" id="tintro"></div>
+    <div class="cards" id="cards"></div>
+    <div class="after"><button class="brass small" id="nextT2">plat suivant →</button><button class="tb dark" data-go="carte">revenir à la carte</button></div>
+  </main>
+</section>
+
+<div class="curtain" id="curtain" aria-hidden="true"></div>
 <div class="toast" id="toast"></div>
 <script src="data_femmes.js" onerror="0"></script>
 <script src="data_immigration.js" onerror="0"></script>
@@ -61,6 +85,7 @@
 <script src="data_sante.js" onerror="0"></script>
 <script src="data_democratie.js" onerror="0"></script>
 <script src="data.js"></script>
+<script src="scene.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

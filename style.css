@@ -126,3 +126,102 @@ footer a{color:var(--chalk)}
   .awning{height:34px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* ================= views ================= */
+.view{display:none}
+body[data-view="dehors"] #v-dehors,body[data-view="carte"] #v-carte,body[data-view="table"] #v-table{display:block}
+/* ---------- façade ---------- */
+#v-dehors{--street:clamp(150px,22vh,200px);position:relative;background:linear-gradient(180deg,#5d4a8a,#c9708a 45%,#f6a56b 80%);height:100vh;height:100svh;min-height:560px;overflow:hidden;background:#2a2238}
+#facadeSvg{position:absolute;left:0;right:0;top:0;bottom:var(--street);width:100%;height:calc(100% - var(--street));display:block;transform-origin:50% 78%;transition:transform .95s cubic-bezier(.6,0,.3,1),filter .95s}
+body.entering #facadeSvg{transform:scale(4.2);filter:brightness(1.6) blur(2px)}
+body.entering #v-dehors::after{content:"";position:absolute;inset:0;background:#ffd98a;animation:flash .95s ease-in forwards}
+@keyframes flash{0%{opacity:0}60%{opacity:0}100%{opacity:1}}
+.street-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:14px 18px;font-family:var(--hand);font-size:1.15rem;color:#fff3dc;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.street-top a{text-decoration:none}.street-top a:hover{text-decoration:underline}
+.street-cta{position:absolute;left:0;right:0;bottom:0;height:var(--street);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 16px;
+  background:repeating-linear-gradient(0deg,transparent 0 13px,rgba(0,0,0,.18) 13px 15px),repeating-linear-gradient(90deg,transparent 0 22px,rgba(0,0,0,.12) 22px 24px),linear-gradient(180deg,#4a4450,#2c2830);
+  box-shadow:inset 0 10px 18px rgba(0,0,0,.45)}
+.street-cta>*{pointer-events:auto}
+.tagline{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:clamp(1rem,2.4vw,1.35rem);color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.7),0 0 2px rgba(0,0,0,.9);margin-bottom:10px}
+.brass{font:700 1.05rem "Playfair Display SC",Georgia,serif;letter-spacing:.12em;padding:13px 30px;border-radius:40px;cursor:pointer;color:#3b2a08;
+  background:linear-gradient(180deg,#fff1b8,#e9c25a 45%,#b8892a);border:2px solid #6b4c12;box-shadow:0 6px 0 #6b4c12,0 12px 24px rgba(0,0,0,.45),inset 0 1px 0 #fff;transition:transform .15s}
+.brass:hover{transform:translateY(-2px)} .brass:active{transform:translateY(3px);box-shadow:0 2px 0 #6b4c12}
+.brass.small{font-size:.9rem;padding:10px 20px}
+.hint{margin-top:10px;font-family:var(--hand);font-size:1.15rem;color:#fff3dc;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+#facadeSvg .hot{cursor:pointer;outline:none}
+#facadeSvg .hot:hover,#facadeSvg .hot:focus-visible{filter:drop-shadow(0 0 10px #ffd98a) brightness(1.08)}
+#facadeSvg .sway{transform-box:view-box;transform-origin:50% 100%;animation:sway 7s ease-in-out infinite alternate}
+#facadeSvg .sway.slow{animation-duration:9s}
+@keyframes sway{0%{transform:rotate(-.25deg)}100%{transform:rotate(.25deg)}}
+#facadeSvg .cluster{transform-box:fill-box;transform-origin:50% 0;animation:swing 4.5s ease-in-out infinite alternate}
+@keyframes swing{0%{transform:rotate(-4deg)}100%{transform:rotate(4deg)}}
+#facadeSvg .steam{animation:steam 3s ease-in-out infinite}
+@keyframes steam{0%{transform:translateY(4px);opacity:0}40%{opacity:.8}100%{transform:translateY(-14px);opacity:0}}
+#facadeSvg .flicker{animation:flick 5s infinite}
+@keyframes flick{0%,100%{opacity:.95}47%{opacity:.95}48%{opacity:.7}50%{opacity:.95}}
+#facadeSvg .pigeon{animation:peck 2.6s infinite}
+@keyframes peck{0%,70%,100%{transform:translate(640px,952px)}78%{transform:translate(642px,956px) rotate(14deg)}86%{transform:translate(640px,952px)}}
+
+/* ---------- interior + menu ---------- */
+#v-carte{position:relative;min-height:100vh;padding:40px 16px 60px;
+  background:linear-gradient(180deg,rgba(0,0,0,.25),rgba(0,0,0,0) 30%),
+    repeating-linear-gradient(90deg,#5b1720 0 120px,#511420 120px 124px),#5b1720}
+#v-carte::after{content:"";position:fixed;left:0;right:0;bottom:0;height:22vh;background:linear-gradient(180deg,#3b0c12,#24070b);border-top:6px solid #c99a3d;z-index:0}
+.interior{position:fixed;inset:0;pointer-events:none;z-index:0}
+.globe{position:absolute;top:0;width:2px;background:#2b1a0a}
+.globe::after{content:"";position:absolute;left:-26px;bottom:-52px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fffbe8,#ffd98a 45%,#e0a13a);box-shadow:0 0 60px 30px rgba(255,210,120,.35)}
+.g1{left:12%;height:90px}.g2{left:50%;height:60px}.g3{left:88%;height:110px}
+.mirror{position:absolute;top:120px;width:22vw;max-width:300px;height:46vh;border:8px solid #c99a3d;border-radius:150px 150px 10px 10px;background:linear-gradient(160deg,rgba(255,240,200,.25),rgba(255,255,255,.05) 40%,rgba(255,220,160,.18));box-shadow:inset 0 0 40px rgba(0,0,0,.35)}
+.m1{left:3%}.m2{right:3%}
+.menu-wrap{position:relative;z-index:1;max-width:760px;margin:0 auto}
+.exit{background:none;border:none;color:#ffe9b5;font-family:var(--hand);font-size:1.3rem;cursor:pointer;margin-bottom:10px}
+.exit:hover{text-decoration:underline}
+.menu{position:relative;background:#fbf6ea;color:#2a1a12;padding:56px clamp(22px,6vw,64px) 40px;border:3px double #a8802a;outline:10px solid #fbf6ea;
+  box-shadow:0 30px 60px rgba(0,0,0,.55),0 0 0 14px #3a2a12;
+  background-image:radial-gradient(ellipse at 50% 0,rgba(201,154,61,.12),transparent 60%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence baseFrequency='.75' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .4 0 0 0 0 .2 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E")}
+body.arrived .menu,body[data-view="carte"] .menu{animation:menuIn .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes menuIn{0%{transform:translateY(40px) rotate(-2deg);opacity:0}100%{transform:none;opacity:1}}
+.orn{position:absolute;width:70px;height:70px;fill:none;stroke:#a8802a;stroke-width:2}
+.orn.tl{top:10px;left:10px}.orn.tr{top:10px;right:10px;transform:scaleX(-1)}.orn.bl{bottom:10px;left:10px;transform:scaleY(-1)}.orn.br{bottom:10px;right:10px;transform:scale(-1)}
+.mhead{text-align:center;margin-bottom:18px}
+.mhouse{font:700 .85rem "Playfair Display SC",serif;letter-spacing:.4em;color:#7a1e26}
+.menu h1{font-family:"Pinyon Script",cursive;font-weight:400;font-size:clamp(3.4rem,10vw,5.2rem);line-height:1.05;color:#2a1a12;text-shadow:none}
+.mtag{font-family:"Playfair Display",serif;font-style:italic;color:#5a4030;max-width:34rem;margin:6px auto 0}
+.mhow{margin-top:12px;font:600 .85rem var(--sans);letter-spacing:.04em;color:#7a1e26}
+.mhow b{display:inline-grid;place-items:center;width:1.5em;height:1.5em;border-radius:50%;border:1.5px solid #a8802a;margin:0 2px}
+.course{font-family:"Pinyon Script",cursive;font-weight:400;font-size:2.6rem;color:#7a1e26;text-align:center;margin:28px 0 8px;line-height:1}
+.course small{display:block;font:700 .72rem "Playfair Display SC",serif;letter-spacing:.35em;color:#a8802a;margin-top:4px}
+.course::after{content:"❦";display:block;font-size:1rem;color:#a8802a;margin-top:4px}
+.dish{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:8px;padding:10px 8px;border-radius:6px;text-decoration:none;color:inherit;transition:background .2s,transform .2s}
+.dish:hover,.dish:focus-visible{background:rgba(201,154,61,.14);transform:translateX(4px);outline:none}
+.dname{font:600 1.2rem "Playfair Display",serif}
+.dish:hover .dname{color:#7a1e26}
+.dots{border-bottom:2px dotted #a8802a;transform:translateY(-4px)}
+.dprice{font:700 1.15rem "Playfair Display SC",serif;color:#7a1e26}
+.dprice small{font:500 .7rem var(--sans);color:#8a7050;letter-spacing:.05em}
+.ddesc{grid-column:1/-1;font-family:"Playfair Display",serif;font-style:italic;font-size:.92rem;color:#6a5040;line-height:1.35}
+.maison{margin-top:30px;border-top:1px solid #d8c69a;padding-top:6px;font-size:.92rem;color:#3a2a20}
+.maison p{margin:8px 0}
+.maison a{color:#7a1e26}
+.mfoot{margin-top:24px;text-align:center;font-family:"Playfair Display",serif;font-style:italic;font-size:.88rem;color:#6a5040}
+.mfoot a{color:#7a1e26}
+
+/* ---------- table ---------- */
+#v-table{min-height:100vh}
+.tablebar{position:sticky;top:0;z-index:6;display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(180deg,#e3e6e8,#aeb5b9 55%,#8d969b);border-bottom:4px solid #5d6569;box-shadow:0 8px 16px rgba(0,0,0,.4)}
+.tbname{flex:1;text-align:center;font:700 1rem var(--sign);letter-spacing:.08em;text-transform:uppercase;color:#2b2f31;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tbnav{display:flex;gap:6px}
+.tb{font:600 .78rem/1 var(--sign);letter-spacing:.06em;text-transform:uppercase;padding:8px 11px;border-radius:4px;cursor:pointer;color:#2b2f31;background:linear-gradient(180deg,#fff,#dfe3e5);border:1.5px solid #6f777b;box-shadow:0 2px 0 #6f777b;white-space:nowrap}
+.tb:hover{background:#fff}
+.tb.dark{background:none;color:var(--chalk);border-color:rgba(242,240,230,.5);box-shadow:none}
+.after{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:-10px 0 60px}
+.curtain{position:fixed;inset:0;background:#1a0a0c;opacity:0;pointer-events:none;transition:opacity .3s;z-index:50}
+.curtain.on{opacity:1}
+@media (max-width:640px){
+  .tbnav{display:none}
+  .mirror{display:none}
+  .menu{outline-width:6px;box-shadow:0 20px 40px rgba(0,0,0,.55),0 0 0 9px #3a2a12}
+  .orn{width:44px;height:44px}
+  .dname{font-size:1.05rem}
+}
+@media (prefers-reduced-motion:reduce){#facadeSvg *{animation:none!important}.menu{animation:none!important}}

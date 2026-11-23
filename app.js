@@ -11,7 +11,7 @@ const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
 };
-const fmt = (v, g) => (g.decimals != null ? v.toFixed(g.decimals) : String(Math.round(v))).replace(".", ",") + (g.unit || "");
+const fmt = (v, g) => (g.decimals != null ? v.toFixed(g.decimals) : String(Math.round(v))).replace(".", ",") + (g.unit === " ans" && v < 2 ? " an" : (g.unit || ""));
 function toast(t) { const e = $("#toast"); e.textContent = t; e.classList.add("on"); setTimeout(() => e.classList.remove("on"), 1600); }
 async function copy(t) {
   try { await navigator.clipboard.writeText(t); toast("Copié !"); }
@@ -87,35 +87,84 @@ function wire(card, c) {
   });
 }
 
+const COURSES = [
+  ["Entrées", "société", ["femmes", "immigration", "laicite", "ecole"]],
+  ["Plats", "l'argent de tous", ["retraites", "dette", "impots", "assistanat"]],
+  ["Plats du jour", "l'État au quotidien", ["securite", "sante"]],
+  ["Desserts", "le monde et nous", ["climat", "europe", "democratie"]],
+];
+const topicById = id => DATA.topics.find(t => t.id === id);
+const ORDER = COURSES.flatMap(c => c[2]).filter(topicById).concat(DATA.topics.map(t => t.id).filter(id => !COURSES.some(c => c[2].includes(id))));
+
+function buildMenu() {
+  const extra = ORDER.filter(id => !COURSES.some(c => c[2].includes(id)));
+  const courses = extra.length ? COURSES.concat([["Suggestions", "nouveautés", extra]]) : COURSES;
+  $("#courses").innerHTML = courses.map(([name, sub, ids]) => {
+    const items = ids.map(topicById).filter(Boolean);
+    if (!items.length) return "";
+    return `<section class="course-sec"><h2 class="course">${name}<small>${sub}</small></h2>${items.map(t =>
+      `<a class="dish" href="#${t.id}" data-t="${t.id}"><span class="dname">${esc(t.name)}</span><span class="dots"></span><span class="dprice">${t.cards.length}<small> tickets</small></span><span class="ddesc">${t.intro.split(". ")[0].replace(/\.$/, "")}.</span></a>`).join("")}</section>`;
+  }).join("");
+}
+
 function render(topicId) {
-  const T = DATA.topics.find(t => t.id === topicId) || DATA.topics[0];
+  const T = topicById(topicId) || topicById(ORDER[0]);
   document.body.dataset.topic = T.id;
-  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.t === T.id));
-  const on = document.querySelector(".tab.on"); if (on) { const n = on.parentElement; n.scrollLeft = on.offsetLeft - n.offsetLeft - 16; }
-  $("#tintro").innerHTML = `<div class="plat">au menu</div><h2>${esc(T.name)}</h2><p>${T.intro}</p>`;
-  const box = $("#cards");
-  box.innerHTML = T.cards.map((c, i) => cardHTML(c, i)).join("");
+  $("#tbname").textContent = T.name;
+  const i = ORDER.indexOf(T.id);
+  const prev = ORDER[(i - 1 + ORDER.length) % ORDER.length], next = ORDER[(i + 1) % ORDER.length];
+  $("#prevT").onclick = () => { location.hash = prev; };
+  $("#nextT").onclick = $("#nextT2").onclick = () => { location.hash = next; };
+  $("#nextT2").textContent = "plat suivant : " + topicById(next).name + " →";
+  $("#tintro").innerHTML = `<div class="plat">${esc(COURSES.find(c => c[2].includes(T.id))?.[0] || "au menu")}</div><h2>${esc(T.name)}</h2><p>${T.intro}</p>`;
+  $("#cards").innerHTML = T.cards.map((c, k) => cardHTML(c, k)).join("");
   T.cards.forEach(c => wire(document.getElementById(c.id), c));
   store.set("topic", T.id);
 }
 
-{
-  const nav = $("#tabs");
-  nav.innerHTML = DATA.topics.map(t => `<button class="tab" data-t="${t.id}">${esc(t.name)}<span class="n">${t.cards.length}</span></button>`).join("")
-;
-  nav.addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) { render(b.dataset.t); history.replaceState(null, "", location.pathname); } });
-  const fromHash = () => {
-    const id = location.hash.slice(1);
-    const T = id && DATA.topics.find(t => t.id === id || t.cards.some(c => c.id === id));
-    if (T) {
-      render(T.id);
-      const el = document.getElementById(id);
-      if (el && el.classList.contains("card")) { el._reveal(); el.scrollIntoView(); }
-      return true;
-    }
-    return false;
+/* ---------- views + transitions ---------- */
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let current = null;
+function show(view, after) {
+  const from = current;
+  current = view;
+  const curtain = $("#curtain");
+  const swap = () => {
+    document.body.dataset.view = view;
+    window.scrollTo(0, 0);
+    if (after) after();
   };
-  if (!fromHash()) render(store.get("topic") || DATA.topics[0].id);
-  addEventListener("hashchange", fromHash);
+  if (REDUCED || !from) { swap(); return; }
+  if (from === "dehors" && view !== "dehors") {
+    document.body.classList.add("entering");
+    setTimeout(() => { swap(); document.body.classList.remove("entering"); document.body.classList.add("arrived"); setTimeout(() => document.body.classList.remove("arrived"), 700); }, 950);
+  } else if (from !== view) {
+    curtain.classList.add("on");
+    setTimeout(() => { swap(); curtain.classList.remove("on"); }, 320);
+  } else swap();
 }
+
+function route() {
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (!id || id === "dehors") return show("dehors");
+  if (id === "carte" || id === "methode") return show("carte", () => { if (id === "methode") document.getElementById("methode").scrollIntoView(); });
+  const T = DATA.topics.find(t => t.id === id || t.cards.some(c => c.id === id));
+  if (!T) return show("dehors");
+  if (document.body.dataset.topic !== T.id || !$("#cards").children.length) render(T.id);
+  show("table", () => {
+    const el = document.getElementById(id);
+    if (el && el.classList.contains("card")) { el._reveal(); requestAnimationFrame(() => el.scrollIntoView()); }
+  });
+}
+
+buildMenu();
+const enter = () => { location.hash = "carte"; };
+$("#enter").addEventListener("click", enter);
+for (const id of ["door", "board"]) {
+  const e = document.getElementById(id);
+  if (e) { e.addEventListener("click", enter); e.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); enter(); } }); }
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-go]"); if (b) { e.preventDefault(); location.hash = b.dataset.go; } });
+addEventListener("hashchange", route);
+route();
 { const u = document.getElementById("upd"); if (u) u.textContent = DATA.updated; }
