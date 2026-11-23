@@ -19,28 +19,30 @@ async function copy(t) {
 }
 const url = id => location.origin + location.pathname + "#" + id;
 
-function cardHTML(c) {
+function cardHTML(c, i) {
   const g = c.guess;
-  const guess = g ? `<div class="guess">
-      <p>${esc(g.q)}</p>
+  const guess = g ? `<div class="napkin">
+      <p class="nq"><span class="pen">votre pari sur la serviette :</span> ${esc(g.q)}</p>
       <div class="gctl"><input type="range" min="${g.min}" max="${g.max}" step="${g.step}" value="${g.start ?? (g.min + g.max) / 2}" aria-label="votre estimation">
-        <span class="gval"></span><button class="btn go">Valider</button></div>
-      <button class="skip">voir directement les chiffres</button>
+        <span class="gval"></span><button class="btn go">Je parie</button></div>
+      <button class="skip">pas de pari, l'addition directement</button>
       <div class="gout" hidden></div></div>`
-    : `<div class="guess"><button class="btn go">Voir les chiffres</button></div>`;
+    : `<div class="napkin"><button class="btn go">L'addition, s'il vous plaît</button></div>`;
   const [vt, vs] = VERDICT[c.verdict];
   return `<article class="card" id="${c.id}">
-    <div class="claim"><div class="kick">on entend souvent</div><q>${esc(c.claim)}</q></div>
+    <div class="slate"><div class="kick">entendu au comptoir · n°${i + 1}</div><q>${esc(c.claim)}</q></div>
     ${guess}
-    <div class="body">
+    <div class="body"><div class="receipt">
+      <div class="rhead"><b>CAFÉ DES FAITS</b><span>ticket ${esc(c.id)} · ${DATA.updated}</span></div>
       <p class="short">${c.short}</p>
-      <div class="nums">${c.nums.map(n => `<div class="num"><b>${n[0]}</b><span>${n[1]}</span></div>`).join("")}</div>
-      <div class="sec"><h4>la nuance qui compte</h4><p>${c.nuance}</p></div>
-      ${c.steel ? `<div class="sec"><h4>l'argument le plus solide de l'autre côté</h4><p class="steel">${c.steel}</p></div>` : ""}
-      <div class="verdict ${c.verdict}"><b>${vt}</b><span>${c.vnote || vs}</span></div>
-      <div class="srcs"><h4 class="sec" style="margin:0">sources</h4><ol>${c.src.map(s => `<li>${s[1] ? `<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>` : s[0]}</li>`).join("")}</ol></div>
+      <div class="lines">${c.nums.map(n => `<div class="line"><span>${n[1]}</span><b>${n[0]}</b></div>`).join("")}</div>
+      <div class="sec"><h4>— la nuance qui compte —</h4><p>${c.nuance}</p></div>
+      ${c.steel ? `<div class="sec"><h4>— l'argument le plus solide d'en face —</h4><p class="steel">${c.steel}</p></div>` : ""}
+      <div class="verdict ${c.verdict}"><b class="stamp">${vt}</b><span>${c.vnote || vs}</span></div>
+      <div class="srcs"><h4>sources</h4><ol>${c.src.map(s => `<li>${s[1] ? `<a href="${s[1]}" target="_blank" rel="noopener">${s[0]}</a>` : s[0]}</li>`).join("")}</ol></div>
       <div class="share"><button class="btn ghost cp-link">Copier le lien</button><button class="btn ghost cp-msg">Copier pour un message</button></div>
-    </div></article>`;
+      <p class="merci">merci de votre visite · à bientôt au comptoir</p>
+    </div></div></article>`;
 }
 
 function wire(card, c) {
@@ -57,7 +59,7 @@ function wire(card, c) {
       if (mine != null) { mk += `<div class="mk you" style="left:${pos(mine)}%">vous<i></i></div>`; leg.push(`vous : <b>${fmt(mine, g)}</b>`); }
       if (g.pub != null) { mk += `<div class="mk pub" style="left:${pos(g.pub)}%">moyenne<i></i></div>`; leg.push(`${esc(g.pubLabel || "estimation moyenne")} : <b>${fmt(g.pub, g)}</b>`); }
       mk += `<div class="mk truth" style="left:${pos(g.a)}%"><i></i>réalité</div>`;
-      leg.push(`<span style="color:var(--acc)">réalité : <b>${fmt(g.a, g)}</b></span>`);
+      leg.push(`<span style="color:#d7262b">réalité : <b>${fmt(g.a, g)}</b></span>`);
       let msg = "";
       if (mine != null) {
         const err = Math.abs(mine - g.a) / (span || 1);
@@ -90,9 +92,9 @@ function render(topicId) {
   document.body.dataset.topic = T.id;
   document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.t === T.id));
   const on = document.querySelector(".tab.on"); if (on) { const n = on.parentElement; n.scrollLeft = on.offsetLeft - n.offsetLeft - 16; }
-  $("#tintro").innerHTML = `<h2>${esc(T.name)}</h2><p>${T.intro}</p>`;
+  $("#tintro").innerHTML = `<div class="plat">au menu</div><h2>${esc(T.name)}</h2><p>${T.intro}</p>`;
   const box = $("#cards");
-  box.innerHTML = T.cards.map(cardHTML).join("");
+  box.innerHTML = T.cards.map((c, i) => cardHTML(c, i)).join("");
   T.cards.forEach(c => wire(document.getElementById(c.id), c));
   store.set("topic", T.id);
 }
