@@ -6,6 +6,17 @@
 }
 body[data-topic="immigration"]{--acc:#0d8a8a;--acc2:#cdeeee}
 body[data-topic="femmes"]{--acc:#e8452c;--acc2:#ffd8cf}
+body[data-topic="retraites"]{--acc:#c2410c;--acc2:#ffe1cc}
+body[data-topic="dette"]{--acc:#4d5b12;--acc2:#e8efc7}
+body[data-topic="impots"]{--acc:#a16207;--acc2:#fdefc3}
+body[data-topic="securite"]{--acc:#1d4ed8;--acc2:#dbe6ff}
+body[data-topic="assistanat"]{--acc:#be185d;--acc2:#fbd9e8}
+body[data-topic="ecole"]{--acc:#0f766e;--acc2:#cdf0ea}
+body[data-topic="laicite"]{--acc:#6d28d9;--acc2:#e7dcfd}
+body[data-topic="climat"]{--acc:#15803d;--acc2:#d6f5df}
+body[data-topic="europe"]{--acc:#1e40af;--acc2:#dfe7fb}
+body[data-topic="sante"]{--acc:#b91c1c;--acc2:#fbdcdc}
+body[data-topic="democratie"]{--acc:#374151;--acc2:#e5e7eb}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;transition:background .3s}
@@ -24,6 +35,7 @@ h1 em{color:var(--acc);font-style:italic}
 .how b{display:block;font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;color:var(--acc)}
 nav.topics{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0;border-bottom:2px solid var(--ink);margin-top:26px}
 nav.topics .wrap{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tab{flex:none}
 .tab{font:600 .92rem var(--sans);padding:8px 14px;border-radius:999px;border:2px solid var(--ink);background:var(--card);cursor:pointer;color:var(--ink)}
 .tab.on{background:var(--ink);color:#fff}
 .tab .n{font-family:var(--mono);font-size:.75rem;opacity:.6;margin-left:4px}
@@ -76,6 +88,7 @@ nav.topics .wrap{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .method p{margin:6px 0}
 footer{padding:20px 0 40px;font-size:.82rem;color:var(--dim)}
 @media (max-width:640px){
+  nav.topics .wrap{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding-bottom:4px}
   .how{grid-template-columns:1fr}
   .card .claim,.guess,.body{padding-left:16px;padding-right:16px}
   .card{box-shadow:4px 4px 0 var(--acc)}

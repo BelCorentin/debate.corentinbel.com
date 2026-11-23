@@ -89,6 +89,7 @@ function render(topicId) {
   const T = DATA.topics.find(t => t.id === topicId) || DATA.topics[0];
   document.body.dataset.topic = T.id;
   document.querySelectorAll(".tab").forEach(b => b.classList.toggle("on", b.dataset.t === T.id));
+  const on = document.querySelector(".tab.on"); if (on) { const n = on.parentElement; n.scrollLeft = on.offsetLeft - n.offsetLeft - 16; }
   $("#tintro").innerHTML = `<h2>${esc(T.name)}</h2><p>${T.intro}</p>`;
   const box = $("#cards");
   box.innerHTML = T.cards.map(cardHTML).join("");
@@ -99,7 +100,7 @@ function render(topicId) {
 {
   const nav = $("#tabs");
   nav.innerHTML = DATA.topics.map(t => `<button class="tab" data-t="${t.id}">${esc(t.name)}<span class="n">${t.cards.length}</span></button>`).join("")
-    + `<span class="soon">bientôt : retraites, insécurité, dette, énergie</span>`;
+;
   nav.addEventListener("click", e => { const b = e.target.closest(".tab"); if (b) { render(b.dataset.t); history.replaceState(null, "", location.pathname); } });
   const fromHash = () => {
     const id = location.hash.slice(1);
